@@ -4,11 +4,18 @@ import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 
 import "./index.css";
+import firebase from "./lib/firebase";
 import App from "./components/App";
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+function renderApp() {
+  ReactDOM.render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>,
+    document.getElementById("root")
+  );
+}
+
+firebase.auth().onAuthStateChanged(user => {
+  renderApp();
+});
