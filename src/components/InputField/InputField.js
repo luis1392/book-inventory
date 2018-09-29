@@ -2,7 +2,9 @@ import React from "react";
 
 export default function InputField(props) {
   const { input, meta, id, type } = props;
-  const isErrorDisplayed = meta.touched && meta.error;
+
+  const error = meta.error || meta.submitError;
+  const isErrorDisplayed = meta.touched && error;
 
   return (
     <React.Fragment>
@@ -13,7 +15,7 @@ export default function InputField(props) {
         {...input}
       />
 
-      {isErrorDisplayed && <div className="invalid-feedback">{meta.error}</div>}
+      {isErrorDisplayed && <div className="invalid-feedback">{error}</div>}
     </React.Fragment>
   );
 }

@@ -1,16 +1,23 @@
 import React, { Component } from "react";
 import { Form, Field } from "react-final-form";
+import { FORM_ERROR } from "final-form";
 import arrayMutators from "final-form-arrays";
 import { FieldArray } from "react-final-form-arrays";
 
 import InputField from "../InputField";
 import CheckboxField from "../CheckboxField";
 import SelectField from "../SelectField";
-import { isRequired, isExactValue } from "../../utils/validations";
+import { isRequired } from "../../utils/validations";
+
+import * as api from "../../lib/api";
 
 export default class NewBookForm extends Component {
   handleSubmit = formData => {
-    console.log({ formData });
+    return api.createBook(formData).catch(error => {
+      return {
+        [FORM_ERROR]: error.message
+      };
+    });
   };
 
   render() {
@@ -28,8 +35,8 @@ export default class NewBookForm extends Component {
         }}
       >
         {/* {(props) => {
-          const { handleSubmit, submitting, values } = props; */}
-        {({ handleSubmit, submitting, values }) => {
+          const { handleSubmit, submitting, values, submitError } = props; */}
+        {({ handleSubmit, submitting, values, submitError }) => {
           return (
             <form onSubmit={handleSubmit}>
               <div className="form-group">
@@ -147,7 +154,7 @@ export default class NewBookForm extends Component {
                 </Field>
               </div>
 
-              <div className="form-group">
+              {/* <div className="form-group">
                 <Field
                   id="hasAcceptedToS"
                   name="hasAcceptedToS"
@@ -156,9 +163,13 @@ export default class NewBookForm extends Component {
                   type="checkbox"
                   validate={isExactValue(true, "You must accept")}
                 />
-              </div>
+              </div> */}
 
-              <button className="btn btn-primary">Save</button>
+              <button className="btn btn-primary" disabled={submitting}>
+                Save
+              </button>
+
+              {submitError && <div className="text-danger">{submitError}</div>}
             </form>
           );
         }}

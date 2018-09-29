@@ -2,7 +2,9 @@ import React from "react";
 
 export default function CheckboxField(props) {
   const { input, meta, id, label } = props;
-  const isErrorDisplayed = meta.touched && meta.error;
+
+  const error = meta.error || meta.submitError;
+  const isErrorDisplayed = meta.touched && error;
 
   return (
     <div className="form-check">
@@ -17,7 +19,7 @@ export default function CheckboxField(props) {
         {label}
       </label>
 
-      {isErrorDisplayed && <div className="invalid-feedback">{meta.error}</div>}
+      {isErrorDisplayed && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 }
