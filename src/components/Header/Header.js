@@ -15,16 +15,18 @@ export default class Header extends Component {
                   <li className="list-inline-item">
                     <Link to="/">Home</Link>
                   </li>
-                  <li className="list-inline-item">
-                    <Link to="/books">Books</Link>
-                  </li>
-                  <li className="list-inline-item">
-                    <Link to="/books/new">New Book</Link>
-                  </li>
                   {isLoggedIn() ? (
-                    <li className="list-inline-item">
-                      <Link to="/logout">Log out</Link>
-                    </li>
+                    <React.Fragment>
+                      <li className="list-inline-item">
+                        <Link to="/books">Books</Link>
+                      </li>
+                      <li className="list-inline-item">
+                        <Link to="/books/new">New Book</Link>
+                      </li>
+                      <li className="list-inline-item">
+                        <Link to="/logout">Log out</Link>
+                      </li>
+                    </React.Fragment>
                   ) : (
                     <React.Fragment>
                       <li className="list-inline-item">
