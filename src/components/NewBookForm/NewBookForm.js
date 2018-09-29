@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { Form, Field } from "react-final-form";
+import arrayMutators from "final-form-arrays";
+import { FieldArray } from "react-final-form-arrays";
 
 import InputField from "../InputField";
 import CheckboxField from "../CheckboxField";
+import SelectField from "../SelectField";
 import { isRequired, isExactValue } from "../../utils/validations";
 
 export default class NewBookForm extends Component {
@@ -17,7 +20,13 @@ export default class NewBookForm extends Component {
     };
 
     return (
-      <Form onSubmit={this.handleSubmit} initialValues={initialValues}>
+      <Form
+        onSubmit={this.handleSubmit}
+        initialValues={initialValues}
+        mutators={{
+          ...arrayMutators
+        }}
+      >
         {/* {(props) => {
           const { handleSubmit, submitting, values } = props; */}
         {({ handleSubmit, submitting, values }) => {
@@ -32,6 +41,48 @@ export default class NewBookForm extends Component {
                   validate={isRequired}
                 />
               </div>
+
+              <FieldArray name="authors">
+                {({ fields }) => {
+                  return (
+                    <React.Fragment>
+                      <h3>
+                        <span className="mr-2">Authors</span>
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => fields.push("")}
+                        >
+                          Add
+                        </button>
+                      </h3>
+                      {fields.map((name, index) => (
+                        <div key={name} className="form-group row">
+                          <div className="col-2">
+                            <label htmlFor={name}>Name</label>
+                          </div>
+
+                          <div className="col-8">
+                            <Field
+                              id={name}
+                              name={name}
+                              component={InputField}
+                              validate={isRequired}
+                            />
+                          </div>
+                          <div className="col-2">
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => fields.remove(index)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </React.Fragment>
+                  );
+                }}
+              </FieldArray>
 
               <div className="form-group">
                 <label htmlFor="publicationDate">Publication Date</label>
@@ -68,10 +119,12 @@ export default class NewBookForm extends Component {
                 <label htmlFor="category">Category</label>
                 <Field
                   id="category"
-                  className="form-control custom-select"
                   name="category"
-                  component="select"
+                  component={SelectField}
+                  validate={isRequired}
                 >
+                  <option />
+
                   {values.isFiction ? (
                     <React.Fragment>
                       <option value="sciFi">Sci-Fi</option>
