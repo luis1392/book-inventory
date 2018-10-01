@@ -1,4 +1,5 @@
 import firebase from "./firebase";
+import snapshotToArray from "../utils/snapshotToArray";
 
 export function signUp(email, password) {
   return firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -15,4 +16,16 @@ export function createBook(book) {
     .database()
     .ref(`user-books/${user.uid}`)
     .push(book);
+}
+
+export function getBooks() {
+  const user = firebase.auth().currentUser;
+
+  return firebase
+    .database()
+    .ref(`user-books/${user.uid}`)
+    .once("value")
+    .then(snapshot => {
+      return snapshotToArray(snapshot);
+    });
 }
