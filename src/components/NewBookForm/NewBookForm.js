@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 import { FORM_ERROR } from "final-form";
 import arrayMutators from "final-form-arrays";
@@ -11,13 +12,18 @@ import { isRequired } from "../../utils/validations";
 
 import * as api from "../../lib/api";
 
-export default class NewBookForm extends Component {
+class NewBookForm extends Component {
   handleSubmit = formData => {
-    return api.createBook(formData).catch(error => {
-      return {
-        [FORM_ERROR]: error.message
-      };
-    });
+    return api
+      .createBook(formData)
+      .then(() => {
+        this.props.history.push("/books");
+      })
+      .catch(error => {
+        return {
+          [FORM_ERROR]: error.message
+        };
+      });
   };
 
   render() {
@@ -177,3 +183,5 @@ export default class NewBookForm extends Component {
     );
   }
 }
+
+export default withRouter(NewBookForm);
