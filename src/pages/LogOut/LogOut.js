@@ -1,21 +1,20 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 import firebase from "../../lib/firebase";
 import isLoggedIn from "../../utils/isLoggedIn";
+import * as currentUserActions from "../../redux/reducers/currentUser";
 
-export default class LogOut extends Component {
+class LogOut extends Component {
   componentDidMount() {
     this.logOut();
   }
 
   logOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .catch(error => {
-        console.error(error);
-      });
+    this.props.logOut().catch(error => {
+      console.error(error);
+    });
   };
 
   render() {
@@ -26,3 +25,13 @@ export default class LogOut extends Component {
     }
   }
 }
+
+const selectState = undefined;
+const actions = {
+  logOut: currentUserActions.logOut
+};
+
+export default connect(
+  selectState,
+  actions
+)(LogOut);

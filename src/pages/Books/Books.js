@@ -1,12 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import * as api from "../../lib/api";
+import * as booksActions from "../../redux/reducers/books";
 
-export default class Books extends Component {
+class Books extends Component {
   state = {
     loading: true,
-    error: null,
-    books: []
+    error: null
   };
 
   componentDidMount() {
@@ -19,12 +19,11 @@ export default class Books extends Component {
       error: null
     });
 
-    api
-      .getBooks()
-      .then(books => {
+    this.props
+      .loadBooks()
+      .then(() => {
         this.setState({
-          loading: false,
-          books
+          loading: false
         });
       })
       .catch(error => {
@@ -36,7 +35,8 @@ export default class Books extends Component {
   };
 
   render() {
-    const { loading, error, books } = this.state;
+    const { loading, error } = this.state;
+    const { books } = this.props;
 
     return (
       <div>
@@ -50,3 +50,18 @@ export default class Books extends Component {
     );
   }
 }
+
+const selectState = state => {
+  return {
+    books: state.books
+  };
+};
+
+const actions = {
+  loadBooks: booksActions.loadBooks
+};
+
+export default connect(
+  selectState,
+  actions
+)(Books);

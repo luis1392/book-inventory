@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import * as api from "../../lib/api";
+import * as currentUserActions from "../../redux/reducers/currentUser";
 
-export default class LoginForm extends Component {
+class LoginForm extends Component {
   emailRef = React.createRef();
   passwordRef = React.createRef();
 
@@ -18,8 +20,8 @@ export default class LoginForm extends Component {
       error: null
     });
 
-    api
-      .login(this.emailRef.current.value, this.passwordRef.current.value)
+    this.props
+      .logIn(this.emailRef.current.value, this.passwordRef.current.value)
       .then(user => {
         this.setState({
           submitting: false
@@ -72,3 +74,14 @@ export default class LoginForm extends Component {
     );
   }
 }
+
+const selectState = undefined;
+
+const actions = {
+  logIn: currentUserActions.logIn
+};
+
+export default connect(
+  selectState,
+  actions
+)(LoginForm);

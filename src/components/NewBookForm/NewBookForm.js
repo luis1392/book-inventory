@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Form, Field } from "react-final-form";
 import { FORM_ERROR } from "final-form";
@@ -10,14 +11,14 @@ import CheckboxField from "../CheckboxField";
 import SelectField from "../SelectField";
 import { isRequired } from "../../utils/validations";
 
-import * as api from "../../lib/api";
+import * as booksActions from "../../redux/reducers/books";
 
 class NewBookForm extends Component {
   handleSubmit = formData => {
-    return api
+    return this.props
       .createBook(formData)
       .then(() => {
-        this.props.history.push("/books");
+        // this.props.history.push("/books");
       })
       .catch(error => {
         return {
@@ -184,4 +185,12 @@ class NewBookForm extends Component {
   }
 }
 
-export default withRouter(NewBookForm);
+const selectState = undefined;
+const actions = {
+  createBook: booksActions.createBook
+};
+
+export default connect(
+  selectState,
+  actions
+)(withRouter(NewBookForm));
